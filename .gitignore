@@ -1,0 +1,14 @@
+# Virtuelle Umgebung
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IDE/Editor spezifische Ordner (optional, aber gut)
+.vscode/
+.idea/
+
+# Windows spezifisch (optional)
+Thumbs.db
+desktop.ini
