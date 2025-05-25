@@ -10,7 +10,6 @@ from PyQt6.QtWidgets import (
     QWidget
 )
 from PyQt6.QtWebEngineWidgets import QWebEngineView
-# QWebEngineHistory wird nicht explizit importiert, da wir es über self.browser.history() erreichen
 
 class MainWindow(QMainWindow):
     def __init__(self, *args, **kwargs):
@@ -19,7 +18,6 @@ class MainWindow(QMainWindow):
         self.base_window_title = "opTiSurf Browser"
         self.setWindowTitle(self.base_window_title)
 
-        # --- Navigationsleiste erstellen ---
         navigation_bar = QHBoxLayout()
 
         self.back_button = QPushButton("←")
@@ -28,7 +26,7 @@ class MainWindow(QMainWindow):
         self.stop_button = QPushButton("✕")
         self.address_bar = QLineEdit()
 
-        # NEU: Initialen Status der Navigationsbuttons setzen
+        # Initialen Status der Navigationsbuttons setzen
         self.back_button.setEnabled(False)
         self.forward_button.setEnabled(False)
 
@@ -38,7 +36,6 @@ class MainWindow(QMainWindow):
         navigation_bar.addWidget(self.stop_button)
         navigation_bar.addWidget(self.address_bar)
 
-        # --- Web Engine View erstellen ---
         self.browser = QWebEngineView()
         self.browser.setUrl(QUrl("https://example.com"))
 
@@ -46,20 +43,14 @@ class MainWindow(QMainWindow):
         self.address_bar.returnPressed.connect(self.navigate_to_url)
         self.browser.urlChanged.connect(self.update_address_bar)
         self.browser.titleChanged.connect(self.update_window_title)
+        
+        # NEU: loadFinished Signal verbinden, um Button-Status zu aktualisieren
+        self.browser.loadFinished.connect(self.update_navigation_button_states)
 
         self.back_button.clicked.connect(self.browser.back)
         self.forward_button.clicked.connect(self.browser.forward)
         self.reload_button.clicked.connect(self.browser.reload)
         self.stop_button.clicked.connect(self.browser.stop)
-
-        # NEU: Signale für Button-Status verbinden
-        # Hole das History-Objekt des Browsers
-        browser_history = self.browser.history()
-        # Verbinde die canGoBackChanged/canGoForwardChanged Signale direkt
-        # mit der setEnabled Methode der jeweiligen Buttons.
-        # Diese Signale senden ein boolesches Argument, das setEnabled erwartet.
-        browser_history.canGoBackChanged.connect(self.back_button.setEnabled)
-        browser_history.canGoForwardChanged.connect(self.forward_button.setEnabled)
 
         main_layout = QVBoxLayout()
         main_layout.addLayout(navigation_bar)
@@ -90,7 +81,19 @@ class MainWindow(QMainWindow):
         else:
             self.setWindowTitle(self.base_window_title)
 
+    # NEUE METHODE: Button-Status basierend auf Browser-History aktualisieren
+    def update_navigation_button_states(self):
+        history = self.browser.history()
+        self.back_button.setEnabled(history.canGoBack())
+        self.forward_button.setEnabled(history.canGoForward())
+
 # QApplication initialisieren
 app = QApplication(sys.argv)
 window = MainWindow()
+# Einmaliger Aufruf nach dem Erstellen des Fensters, um den initialen Status zu setzen,
+# nachdem die erste Seite möglicherweise schon anfängt zu laden.
+# loadFinished wird dies dann bei Bedarf korrigieren.
+# Alternativ: Die erste Seite (example.com) wird geladen und löst loadFinished aus, was dann die Methode aufruft.
+# window.update_navigation_button_states() # Kann hier auch aufgerufen werden, aber loadFinished sollte reichen.
+
 sys.exit(app.exec())
