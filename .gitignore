@@ -4,6 +4,8 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+opTiSurf/
+opTiSurf/opTiSurf.exe
 
 # IDE/Editor spezifische Ordner (optional, aber gut)
 .vscode/
@@ -12,3 +14,6 @@ __pycache__/
 # Windows spezifisch (optional)
 Thumbs.db
 desktop.ini
+Ergänzungen.txt
+text_nach_installation.txt
+text_vor_installation.txt
