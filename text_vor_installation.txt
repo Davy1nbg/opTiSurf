@@ -1,0 +1,11 @@
+Willkommen zum Setup von opTiSurf Browser!
+
+Sie sind dabei, den opTiSurf Browser [Version 0.2.0] auf Ihrem Computer zu installieren.
+
+opTiSurf Browser ist ein von David Pierzyna [Alias: opTi | GitHub: davy1nbg] entwickelter Webbrowser mit Fokus auf Einfachheit und Minimalismus.
+
+Es wird empfohlen, alle anderen Anwendungen zu schließen, bevor Sie mit der Installation fortfahren, um sicherzustellen, dass alle Dateien korrekt aktualisiert werden können.
+
+Klicken Sie auf "Weiter", um mit der Installation zu beginnen. Wenn Sie die Installation zu einem späteren Zeitpunkt durchführen möchten, klicken Sie bitte auf "Abbrechen".
+
+Vielen Dank für Ihr Interesse an opTiSurf Browser!

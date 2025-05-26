@@ -1,0 +1,15 @@
+opTiSurf Browser wurde erfolgreich installiert!
+
+Herzlichen Glückwunsch! opTiSurf Browser [Version 0.2.0] ist nun auf Ihrem Computer installiert und bereit zur Nutzung.
+
+Folgendes wurde eingerichtet:
+* Das Programm wurde im gewählten Verzeichnis installiert.
+* Verknüpfungen zum Starten von opTiSurf Browser wurden [auf dem Desktop / im Startmenü / an den von Ihnen gewählten Orten] erstellt.
+
+Sie können opTiSurf Browser jetzt über die erstellte Verknüpfung starten.
+
+Wir wünschen Ihnen viel Spaß und ein großartiges Surferlebnis mit opTiSurf Browser!
+
+Feedback oder Fragen? Sie erreichen David Pierzyna unter opTiSurf@davydavy.de
+
+Klicken Sie auf "Fertigstellen", um das Setup zu beenden.
