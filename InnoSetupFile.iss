@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "opTiSurf Browser"
-#define MyAppVersion "0.2.0"
+#define MyAppVersion "0.3.0"
 #define MyAppPublisher "davy1nbg"
 #define MyAppURL "https://github.com/Davy1nbg/opTiSurf"
 #define MyAppExeName "opTiSurf.exe"
@@ -13,7 +13,7 @@
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{063D0BC0-67F1-4427-9049-4810BC7EA8C1}
+AppId={{063D0BC0-67F1-4427-9049-4810BC7EA8C1} 
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
