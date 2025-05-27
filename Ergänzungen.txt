@@ -1,1 +1,0 @@
-pyinstaller --name opTiSurf --onefile --windowed --icon=opTiSurf.ico main_browser.py
