@@ -6,6 +6,7 @@ __pycache__/
 *.pyd
 opTiSurf/
 dist/
+exe/
 
 # IDE/Editor spezifische Ordner (optional, aber gut)
 .vscode/
