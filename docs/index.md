@@ -8,7 +8,6 @@ Hier findet ihr Infos zu aktuellen und geplanten Features.
 ## Download
 * [opTiSurf Setup v0.3.0](https://github.com/Davy1nbg/opTiSurf/releases/download/v0.3.0/opTiSurf.exe)
 
-=======
 
 ## Aktuelle Features
 * NEU: Automatische Update-Prüfung und -Benachrichtigung: opTiSurf prüft jetzt beim Start automatisch, ob eine neue Version zum Download bereitsteht. Zusätzlich können Sie jederzeit manuell über das Menü 'Hilfe' -> 'Nach Updates suchen...' eine Prüfung anstoßen. Ist ein Update verfügbar, erhalten Sie eine Benachrichtigung mit einem direkten Link zur Download-Seite. (Die Installation des Updates erfolgt weiterhin manuell.)
