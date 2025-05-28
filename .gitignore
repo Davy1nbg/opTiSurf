@@ -8,6 +8,7 @@ opTiSurf/
 dist/
 exe/
 build/
+Output/
 
 # IDE/Editor spezifische Ordner (optional, aber gut)
 .vscode/
@@ -21,3 +22,4 @@ opTiSurf.exe
 text_nach_installation.txt
 text_vor_installation.txt
 dist/opTiSurf.exe
+Output/mysetup.exe
