@@ -6,7 +6,7 @@ opTiSurf ist ein Webbrowser-Projekt, das mit Python und PyQt entwickelt wird.
 Hier findet ihr Infos zu aktuellen und geplanten Features.
 
 ## Download
-* [opTiSurf Setup v0.3.1](https://github.com/Davy1nbg/opTiSurf/releases/download/v0.3.1/opTiSurf.exe)
+* [opTiSurf Setup v0.3.1](https://github.com/Davy1nbg/opTiSurf/releases/download/v0.3.1/opTiSurf_installer.exe)
 
 =======
 
