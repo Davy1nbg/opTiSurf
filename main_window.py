@@ -107,7 +107,7 @@ class MainWindow(QMainWindow):
         self.update_check_on_startup = on_startup # Speichern für den Handler
 
         self.update_thread = QThread()
-        self.update_worker = UpdateCheckWorker(CURRENT_APP_VERSION, GITHUB_REPO_OWNER, GITHUB_REPO_NAME)
+        self.update_worker = UpdateCheckWorker(CURRENT_APP_VERSION)
         self.update_worker.moveToThread(self.update_thread)
 
         self.update_thread.started.connect(self.update_worker.run)
@@ -191,52 +191,3 @@ class MainWindow(QMainWindow):
         self.update_thread.start()
         if not on_startup:
             print("Suche nach Updates...")
-
-class UpdateCheckWorker(QObject):
-    finished = pyqtSignal(dict) # Signal sendet ein Dictionary mit Ergebnissen
-
-    def __init__(self, current_version_str, owner, repo):
-        super().__init__()
-        self.current_version_str = current_version_str
-        self.owner = owner
-        self.repo = repo
-
-    def run(self):
-        api_url = f"https://api.github.com/repos/{self.owner}/{self.repo}/releases/latest"
-        result = {
-            "update_available": False,
-            "latest_version": self.current_version_str,
-            "html_url": "",
-            "error": None
-        }
-
-        try:
-            with urllib.request.urlopen(api_url, timeout=10) as response:
-                if response.status == 200:
-                    data = json.load(response)
-                    latest_version_str = data.get("tag_name", "").lstrip('v') # 'v0.4.0' -> '0.4.0'
-                    html_url = data.get("html_url", "")
-
-                    if not latest_version_str:
-                        result["error"] = "Kein tag_name im Release gefunden."
-                        self.finished.emit(result)
-                        return
-
-                    result["latest_version"] = latest_version_str
-                    result["html_url"] = html_url
-                    
-                    current_v = parse_version(self.current_version_str)
-                    latest_v = parse_version(latest_version_str)
-
-                    if latest_v > current_v:
-                        result["update_available"] = True
-                else:
-                    result["error"] = f"Fehler bei API-Abfrage: Status {response.status}"
-        except urllib.error.URLError as e:
-            result["error"] = f"Netzwerkfehler: {e.reason}"
-        except json.JSONDecodeError:
-            result["error"] = "Fehler beim Parsen der API-Antwort."
-        except Exception as e:
-            result["error"] = f"Unbekannter Fehler: {str(e)}"
-        
-        self.finished.emit(result)
