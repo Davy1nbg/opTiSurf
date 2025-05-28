@@ -1,5 +1,6 @@
 import json
 import urllib.request
+from update_checker import UpdateCheckWorker # Importiere den Worker
 from packaging.version import parse as parse_version # Robusterer Versionsvergleich
 from PyQt6.QtCore import QThread, QObject, pyqtSignal, QUrl
 from PyQt6.QtWidgets import QMessageBox
@@ -19,7 +20,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 
 # main_window.py
-CURRENT_APP_VERSION = "0.3.0" # Beispiel: Setze hier deine aktuelle Version ein!
+CURRENT_APP_VERSION = "0.3.1" # Beispiel: Setze hier deine aktuelle Version ein!
 GITHUB_REPO_OWNER = "davy1nbg" # Dein GitHub Benutzername
 GITHUB_REPO_NAME = "opTiSurf" # Name deines Repos (oder wie es heißt)
 
@@ -171,6 +172,25 @@ class MainWindow(QMainWindow):
         history = self.browser.history()
         self.back_button.setEnabled(history.canGoBack())
         self.forward_button.setEnabled(history.canGoForward())
+    
+    def perform_update_check(self, on_startup=False):
+        self.update_check_on_startup = on_startup
+
+        self.update_thread = QThread()
+        # Der Worker benötigt jetzt nur noch die CURRENT_APP_VERSION
+        self.update_worker = UpdateCheckWorker(CURRENT_APP_VERSION) 
+        self.update_worker.moveToThread(self.update_thread)
+
+        self.update_thread.started.connect(self.update_worker.run)
+        self.update_worker.finished.connect(self.handle_update_check_result)
+
+        self.update_worker.finished.connect(self.update_thread.quit)
+        self.update_worker.finished.connect(self.update_worker.deleteLater)
+        self.update_thread.finished.connect(self.update_thread.deleteLater)
+
+        self.update_thread.start()
+        if not on_startup:
+            print("Suche nach Updates...")
 
 class UpdateCheckWorker(QObject):
     finished = pyqtSignal(dict) # Signal sendet ein Dictionary mit Ergebnissen
