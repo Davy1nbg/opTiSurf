@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "opTiSurf Browser"
-#define MyAppVersion "0.3.1"
+#define MyAppVersion "0.5.0"
 #define MyAppPublisher "davy1nbg"
 #define MyAppURL "https://github.com/Davy1nbg/opTiSurf"
 #define MyAppExeName "opTiSurf.exe"
