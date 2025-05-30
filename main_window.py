@@ -1,24 +1,30 @@
-import json # Behalten, falls du es hier doch mal brauchst, sonst entfernen
-import urllib.request # Behalten für UpdateCheckWorker, falls er hier definiert wäre
-from packaging.version import parse as parse_version
+import json # Wird aktuell nicht direkt in dieser Datei verwendet
+import urllib.request # Wird aktuell nicht direkt in dieser Datei verwendet
+from packaging.version import parse as parse_version # Wird aktuell nicht direkt hier verwendet
 
 from PyQt6.QtCore import QThread, QObject, pyqtSignal, QUrl, Qt, QSettings
-from PyQt6.QtGui import QAction, QDesktopServices # QIcon ggf. hier importieren, wenn Icons verwendet werden
+from PyQt6.QtGui import QAction, QDesktopServices # QIcon ggf. importieren, wenn du Icons für Aktionen setzt
 from PyQt6.QtWidgets import (
     QMainWindow, QLineEdit, QVBoxLayout, QHBoxLayout,
     QPushButton, QWidget, QMenu, QMessageBox, QInputDialog, QDialog
 )
-from PyQt6.QtWebEngineCore import QWebEnginePage, QWebEngineProfile # Behalten für Browser-Interaktionen
+from PyQt6.QtWebEngineCore import QWebEnginePage, QWebEngineProfile # Bleibt für Browser-Funktionen
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 
 # Eigene Modul-Imports
 from update_checker import UpdateCheckWorker
 from bookmark_manager import BookmarkManager
 from settings_dialog import SettingsDialog
-from bookmark_widgets import BookmarkManagerDialog, UNSORTED_FOLDER_NAME # UNSORTED_FOLDER_NAME importieren
+from bookmark_widgets import BookmarkManagerDialog, UNSORTED_FOLDER_NAME
+from history_manager import HistoryManager
+from history_widgets import HistoryDialog # Annahme: HistoryDialog ist hier definiert oder wird importiert
+from config import (
+    START_PAGE_SETTING_KEY, DEFAULT_START_PAGE,
+    HISTORY_DURATION_SETTING_KEY, HISTORY_DURATION_OPTIONS, DEFAULT_HISTORY_DURATION_DAYS
+)
 
 # Globale Konstante für die Anwendung
-CURRENT_APP_VERSION = "0.4.0" # Aktualisiere dies bei jedem Release
+CURRENT_APP_VERSION = "0.4.0" # Beispiel: Aktualisiere dies bei jedem Release
 
 class MainWindow(QMainWindow):
     def __init__(self, *args, **kwargs):
@@ -36,43 +42,51 @@ class MainWindow(QMainWindow):
         self.setWindowTitle(self.base_window_title)
 
         self.bookmark_manager = BookmarkManager()
+        self.history_manager = HistoryManager()
         self.browser = QWebEngineView()
 
     def _setup_ui_components(self):
-        """Erstellt und arrangiert die Haupt-UI-Komponenten (Menü, Navigationsleiste, Layout)."""
+        """Erstellt und arrangiert die Haupt-UI-Komponenten."""
         self._create_menu_bar()
         self._create_navigation_bar()
         self._setup_main_layout()
 
     def _connect_signals(self):
-        """Verbindet alle notwendigen Signale der Anwendung mit den entsprechenden Slots."""
-        if hasattr(self, 'bookmark_manager'): # Sicherstellen, dass bookmark_manager existiert
+        """Verbindet alle notwendigen Signale mit Slots."""
+        if hasattr(self, 'bookmark_manager'):
             self.bookmark_manager.bookmarks_changed.connect(self._update_bookmarks_menu)
-        
-        # Navigationsleisten-Signale
+        if hasattr(self, 'history_manager'): # Signal für History-Dialog
+             self.history_manager.history_changed.connect(self._handle_history_changed_for_dialogs)
+
         self.address_bar.returnPressed.connect(self.navigate_to_url)
         self.back_button.clicked.connect(self.browser.back)
         self.forward_button.clicked.connect(self.browser.forward)
         self.reload_button.clicked.connect(self.browser.reload)
         self.stop_button.clicked.connect(self.browser.stop)
 
-        # Browser-Signale
         self.browser.urlChanged.connect(self.update_address_bar)
         self.browser.titleChanged.connect(self.update_window_title)
         self.browser.loadFinished.connect(self.update_navigation_button_states)
+        self.browser.loadFinished.connect(self._add_to_history)
 
     def _perform_initial_actions(self):
-        """Führt Aktionen aus, die nach der UI-Initialisierung und dem Setzen von Signalen erfolgen."""
-        start_url = self.settings.value("startPageUrl", "https://example.com")
+        """Führt Aktionen aus, die nach der UI-Initialisierung erfolgen."""
+        start_url = self.settings.value(START_PAGE_SETTING_KEY, DEFAULT_START_PAGE)
         self.browser.setUrl(QUrl(start_url))
         
-        self._update_bookmarks_menu() # Lesezeichen-Menü initial und korrekt füllen
+        if hasattr(self, 'history_manager'):
+            days_to_keep = self.settings.value(HISTORY_DURATION_SETTING_KEY, 
+                                               DEFAULT_HISTORY_DURATION_DAYS,
+                                               type=int) 
+            # print(f"INFO [MainWindow]: Rufe Verlaufsbereinigung auf (Einstellung: {days_to_keep} Tage).") # Kann für Release reduziert werden
+            self.history_manager.cleanup_old_history_entries(days_to_keep)
+        
+        self._update_bookmarks_menu()
 
         self.resize(1024, 768)
         self.show()
 
-        # Update-Check beim Start (kann wieder aktiviert werden, wenn die Logik stabil ist)
-        # self.perform_update_check(on_startup=True)
+        # self.perform_update_check(on_startup=True) # Update-Check kann hier aktiviert werden
 
     def _create_menu_bar(self):
         """Erstellt die Menüleiste und die dazugehörigen Menüs und Aktionen."""
@@ -85,23 +99,23 @@ class MainWindow(QMainWindow):
         file_menu.addAction(settings_action)
         file_menu.addSeparator()
         exit_action = QAction("&Beenden", self)
-        exit_action.triggered.connect(self.close) # self.close() ist eine Methode von QMainWindow
+        exit_action.triggered.connect(self.close)
         file_menu.addAction(exit_action)
 
         # Lesezeichen-Menü
-        # Das Menü selbst wird als Instanzattribut gespeichert, um es in _update_bookmarks_menu zu verwenden
         self.bookmarks_menu = menu_bar.addMenu("&Lesezeichen")
-        
-        # Statische Aktionen für das Lesezeichen-Menü als Instanzattribute definieren
         self.add_bookmark_action = QAction("Aktuelle Seite hinzufügen...", self)
-        # self.add_bookmark_action.setIcon(QIcon("pfad/zum/add_icon.png")) # Beispiel für Icon-Pfad
         self.add_bookmark_action.triggered.connect(self._add_current_page_as_bookmark)
-
         self.manage_bookmarks_action = QAction("Lesezeichen verwalten...", self)
-        # self.manage_bookmarks_action.setIcon(QIcon("pfad/zum/manage_icon.png")) # Beispiel
         self.manage_bookmarks_action.triggered.connect(self._open_bookmark_manager_dialog)
-        
-        # Das eigentliche Hinzufügen der Aktionen zum Menü erfolgt in _update_bookmarks_menu
+        # Die Aktionen werden durch _update_bookmarks_menu() dem Menü hinzugefügt
+
+        # Verlauf-Menü
+        self.history_menu = menu_bar.addMenu("&Verlauf") # Als Instanzattribut speichern für ggf. dyn. Einträge
+        show_history_action = QAction("Gesamten Verlauf anzeigen...", self)
+        show_history_action.triggered.connect(self._open_history_dialog)
+        self.history_menu.addAction(show_history_action)
+        # Hier könnten später die letzten X Verlaufseinträge dynamisch hinzugefügt werden
 
         # Hilfe-Menü
         help_menu = menu_bar.addMenu("&Hilfe")
@@ -110,8 +124,8 @@ class MainWindow(QMainWindow):
         help_menu.addAction(check_for_updates_action)
 
     def _create_navigation_bar(self):
-        """Erstellt die UI-Elemente der Navigationsleiste und legt sie in einem Layout ab."""
-        self.navigation_bar_layout = QHBoxLayout() # Layout als Instanzattribut speichern
+        """Erstellt die UI-Elemente der Navigationsleiste."""
+        self.navigation_bar_layout = QHBoxLayout()
         
         self.back_button = QPushButton("←")
         self.forward_button = QPushButton("→")
@@ -131,10 +145,10 @@ class MainWindow(QMainWindow):
         
     def _setup_main_layout(self):
         """Setzt das zentrale Widget und das Hauptlayout der Anwendung."""
-        main_container_widget = QWidget() # Ein Container-Widget für das Hauptlayout
-        main_layout = QVBoxLayout(main_container_widget) # Layout dem Container-Widget zuweisen
+        main_container_widget = QWidget() 
+        main_layout = QVBoxLayout(main_container_widget)
 
-        if hasattr(self, 'navigation_bar_layout'): # Sicherstellen, dass das Layout existiert
+        if hasattr(self, 'navigation_bar_layout'):
             main_layout.addLayout(self.navigation_bar_layout)
         main_layout.addWidget(self.browser)
         
@@ -142,6 +156,14 @@ class MainWindow(QMainWindow):
         main_layout.setSpacing(0)
         
         self.setCentralWidget(main_container_widget)
+
+    def _add_to_history(self, ok: bool):
+        """Fügt die aktuell geladene Seite zum Verlauf hinzu, wenn das Laden erfolgreich war."""
+        if ok and hasattr(self, 'history_manager') and self.browser and self.browser.url().isValid():
+            url = self.browser.url().toString()
+            title = self.browser.page().title()
+            if url != "about:blank": # Ignoriere "about:blank" für den Verlauf
+                self.history_manager.add_visit(url, title)
 
     def _add_current_page_as_bookmark(self):
         """Fügt die aktuell im Browser angezeigte Seite als Lesezeichen hinzu."""
@@ -153,26 +175,24 @@ class MainWindow(QMainWindow):
         page_title = self.browser.page().title().strip()
 
         if not page_title: 
-            page_title = current_url # Fallback, falls Seite keinen Titel hat
+            page_title = current_url
 
         if current_url == "about:blank":
             QMessageBox.warning(self, "Lesezeichenfehler", "Diese Seite kann nicht als Lesezeichen gespeichert werden.")
             return
         
         existing_folders = self.bookmark_manager.get_folder_names()
-        folder_choices = [UNSORTED_FOLDER_NAME] + sorted(existing_folders) # UNSORTED_FOLDER_NAME importieren
+        folder_choices = [UNSORTED_FOLDER_NAME] + sorted(existing_folders)
         new_folder_option_text = "Neuen Ordner erstellen..."
         folder_choices.append(new_folder_option_text)
 
         chosen_folder_display_name, ok = QInputDialog.getItem(self, 
                                                       "Lesezeichen speichern in", 
                                                       "Ordner auswählen oder neuen Namen eingeben:", 
-                                                      folder_choices, 
-                                                      0, # Index von UNSORTED_FOLDER_NAME
-                                                      True) # Editierbar machen
+                                                      folder_choices, 0, True)
 
         if not ok or not chosen_folder_display_name:
-            print("INFO: Hinzufügen des Lesezeichens abgebrochen.")
+            # print("INFO: Hinzufügen des Lesezeichens abgebrochen.") # Für Debugging
             return
 
         final_folder_name = None
@@ -180,35 +200,29 @@ class MainWindow(QMainWindow):
             new_custom_name, ok_new = QInputDialog.getText(self, "Neuer Ordner", "Name für neuen Ordner:")
             if ok_new and new_custom_name.strip():
                 final_folder_name = new_custom_name.strip()
-                # Stelle sicher, dass der Ordner im Manager bekannt wird, auch wenn er leer startet
                 self.bookmark_manager.create_folder(final_folder_name) 
             else:
-                print("INFO: Erstellung eines neuen Ordners abgebrochen oder leerer Name.")
                 return
         elif chosen_folder_display_name != UNSORTED_FOLDER_NAME:
             final_folder_name = chosen_folder_display_name.strip()
         
-        # Optional: Titel des Lesezeichens abfragen/bearbeiten lassen
         final_title, ok_title = QInputDialog.getText(self, "Lesezeichen Titel", "Titel für das Lesezeichen:", text=page_title)
         if not ok_title or not final_title.strip():
-            print("INFO: Titelvergabe für Lesezeichen abgebrochen oder leerer Titel.")
             return
         page_title_to_save = final_title.strip()
 
         if self.bookmark_manager.add_bookmark(page_title_to_save, current_url, final_folder_name):
             QMessageBox.information(self, "Lesezeichen hinzugefügt", 
                                     f"Lesezeichen '{page_title_to_save}'\nwurde zu Ordner '{final_folder_name if final_folder_name else UNSORTED_FOLDER_NAME}' hinzugefügt.")
-        # Das _update_bookmarks_menu wird durch das bookmarks_changed Signal vom BookmarkManager ausgelöst
+        # _update_bookmarks_menu wird durch das bookmarks_changed Signal vom BookmarkManager ausgelöst
 
     def _update_bookmarks_menu(self):
         """Aktualisiert das Lesezeichen-Menü dynamisch."""
         if not hasattr(self, 'bookmarks_menu'):
-            print("WARNUNG: Lesezeichen-Menü nicht initialisiert für Update.")
             return
 
         self.bookmarks_menu.clear()
 
-        # Statische Aktionen (definiert in _create_menu_bar) wieder hinzufügen
         if hasattr(self, 'add_bookmark_action'):
             self.bookmarks_menu.addAction(self.add_bookmark_action)
         if hasattr(self, 'manage_bookmarks_action'):
@@ -217,19 +231,16 @@ class MainWindow(QMainWindow):
         self.bookmarks_menu.addSeparator()
 
         bookmarks_list = self.bookmark_manager.get_all_bookmarks()
-        # Hier könnte man später eine komplexere Logik einbauen, um Ordner als Untermenüs darzustellen.
-        # Fürs Erste: Flache Liste aller Lesezeichen.
         if bookmarks_list:
-            for bm in reversed(bookmarks_list): # Neueste Lesezeichen zuerst
-                # Nur Lesezeichen mit Titel und URL anzeigen
+            for bm in reversed(bookmarks_list): 
                 if bm.get('title') and bm.get('url'): 
                     display_text = bm['title']
-                    if bm.get('folder_name'): # Optional Ordnernamen im Menü anzeigen
+                    if bm.get('folder_name'):
                         display_text += f" ({bm['folder_name']})"
                     
                     action = QAction(display_text, self)
-                    action.setData(bm) # Speichere das ganze Lesezeichen-Dictionary
-                    action.setToolTip(bm['url']) # Zeige URL als Tooltip
+                    action.setData(bm) 
+                    action.setToolTip(bm['url'])
                     action.triggered.connect(self._open_bookmark_from_menu)
                     self.bookmarks_menu.addAction(action)
         else:
@@ -241,12 +252,10 @@ class MainWindow(QMainWindow):
         """Öffnet ein Lesezeichen, das aus dem Menü ausgewählt wurde."""
         action = self.sender() 
         if action and isinstance(action, QAction):
-            bookmark_data = action.data() # Sollte das Lesezeichen-Dictionary sein
+            bookmark_data = action.data()
             if isinstance(bookmark_data, dict) and bookmark_data.get('url'):
                 url_to_load = bookmark_data['url']
                 self.browser.setUrl(QUrl(url_to_load))
-            # Der Fall, dass nur ein String als data gespeichert wurde, ist hier nicht mehr relevant,
-            # da wir das ganze Dictionary speichern.
 
     def _open_bookmark_manager_dialog(self):
         """Öffnet den Dialog zur Verwaltung der Lesezeichen."""
@@ -256,29 +265,55 @@ class MainWindow(QMainWindow):
         
         dialog = BookmarkManagerDialog(self.bookmark_manager, self)
         
-        # Workaround für Doppelklick im Dialog (Signal wäre sauberer)
-        if hasattr(dialog, 'double_clicked_bookmark_url'):
+        if hasattr(dialog, 'double_clicked_bookmark_url'): # Workaround für Doppelklick
             del dialog.double_clicked_bookmark_url 
 
-        dialog.exec() # Modaler Dialog
+        dialog.exec()
 
         if hasattr(dialog, 'double_clicked_bookmark_url') and dialog.double_clicked_bookmark_url:
             url_to_load = dialog.double_clicked_bookmark_url
-            print(f"INFO: Lade Lesezeichen via Doppelklick aus Dialog: {url_to_load}")
             self.browser.setUrl(QUrl(url_to_load))
-        # Änderungen im Dialog sollten das bookmarks_changed Signal auslösen und das Menü aktualisieren.
+
+    def _open_history_dialog(self):
+        """Öffnet den Dialog zur Anzeige des Browserverlaufs."""
+        if not hasattr(self, 'history_manager'):
+            QMessageBox.critical(self, "Fehler", "Verlaufs-Manager nicht initialisiert.")
+            return
+        
+        dialog = HistoryDialog(self.history_manager, self)
+        
+        if hasattr(dialog, 'open_url_requested_via_double_click_or_button'): # Workaround für Doppelklick/Öffnen
+            del dialog.open_url_requested_via_double_click_or_button
+
+        dialog.exec()
+
+        if hasattr(dialog, 'open_url_requested_via_double_click_or_button') and \
+           dialog.open_url_requested_via_double_click_or_button:
+            url_to_load = dialog.open_url_requested_via_double_click_or_button
+            self.browser.setUrl(QUrl(url_to_load))
+            
+    def _handle_history_changed_for_dialogs(self):
+        """Slot, der aufgerufen wird, wenn sich der Verlauf ändert.
+           Könnte verwendet werden, um geöffnete Verlaufsdialoge zu aktualisieren.
+           Momentan verlässt sich HistoryDialog auf sein eigenes Signal-Connect beim Init.
+        """
+        # print("DEBUG [MainWindow]: History changed signal received.")
+        # Wenn der HistoryDialog ein update_content() hätte und wir eine Referenz darauf:
+        # if hasattr(self, 'current_history_dialog') and self.current_history_dialog.isVisible():
+        # self.current_history_dialog.populate_history_tree() # Beispiel
+        pass
+
 
     def perform_update_check(self, on_startup=False):
         """Startet den asynchronen Prozess zur Überprüfung auf Anwendungsupdates."""
         self.update_check_on_startup = on_startup 
         self.update_thread = QThread()
-        self.update_worker = UpdateCheckWorker(CURRENT_APP_VERSION) # Nutzt globale App-Version
+        self.update_worker = UpdateCheckWorker(CURRENT_APP_VERSION)
         self.update_worker.moveToThread(self.update_thread)
 
         self.update_thread.started.connect(self.update_worker.run)
         self.update_worker.finished.connect(self.handle_update_check_result)
         
-        # Sicherstellen, dass Worker und Thread nach Beendigung aufgeräumt werden
         self.update_worker.finished.connect(self.update_thread.quit)
         self.update_worker.finished.connect(self.update_worker.deleteLater)
         self.update_thread.finished.connect(self.update_thread.deleteLater)
@@ -306,27 +341,52 @@ class MainWindow(QMainWindow):
             
             if msg_box.exec() == QMessageBox.StandardButton.Yes:
                 QDesktopServices.openUrl(QUrl(result['html_url']))
-        elif not self.update_check_on_startup: # Nur bei manuellem Check "Kein Update" anzeigen
+        elif not self.update_check_on_startup:
             QMessageBox.information(self, "Keine Updates", 
                                     f"Sie verwenden die aktuellste Version von opTiSurf ({CURRENT_APP_VERSION}).")
     
     def open_settings_dialog(self):
-        """Öffnet den Einstellungsdialog."""
+        """Öffnet den Einstellungsdialog und gibt eine spezifische Rückmeldung zu Änderungen."""
+        old_start_page = self.settings.value(START_PAGE_SETTING_KEY, DEFAULT_START_PAGE)
+        old_history_duration = self.settings.value(HISTORY_DURATION_SETTING_KEY, 
+                                                   DEFAULT_HISTORY_DURATION_DAYS, type=int)
+
         dialog = SettingsDialog(self)
-        if dialog.exec(): # True wenn OK geklickt wurde
-            print("INFO: Einstellungen gespeichert.")
-            # Cookie-spezifische Logik wurde entfernt.
-            QMessageBox.information(self, 
-                                    "Einstellungen übernommen", 
-                                    "Änderungen an der Startseite werden beim nächsten Start des Browsers wirksam.")
+        
+        if dialog.exec():
+            new_start_page = self.settings.value(START_PAGE_SETTING_KEY, DEFAULT_START_PAGE)
+            new_history_duration = self.settings.value(HISTORY_DURATION_SETTING_KEY, 
+                                                       DEFAULT_HISTORY_DURATION_DAYS, type=int)
+            changed_messages = []
+            settings_were_changed = False
+
+            if old_start_page != new_start_page:
+                changed_messages.append("Die **Startseite** wird beim nächsten Start des Browsers geändert.")
+                settings_were_changed = True
+            
+            if old_history_duration != new_history_duration:
+                duration_text = "unbekannt"
+                for text, days in HISTORY_DURATION_OPTIONS.items(): 
+                    if days == new_history_duration:
+                        duration_text = text.lower().replace(" (standard)", "")
+                        break
+                changed_messages.append(f"Die **Speicherdauer des Verlaufs** wurde auf '{duration_text}' geändert und wird beim nächsten Start für die Bereinigung angewendet.")
+                settings_were_changed = True
+            
+            if settings_were_changed:
+                final_message_title = "Einstellungen erfolgreich geändert"
+                final_message_text = "Folgende Einstellungen wurden angepasst:\n\n- " + "\n- ".join(changed_messages)
+            else:
+                final_message_title = "Einstellungen gespeichert"
+                final_message_text = "Es wurden keine Änderungen an den Einstellungen vorgenommen."
+            QMessageBox.information(self, final_message_title, final_message_text)
         else:
-            print("INFO: Einstellungen abgebrochen.")
+            print("INFO: Einstellungsdialog abgebrochen.")
 
     def navigate_to_url(self):
-        """Navigiert zur URL, die in der Adressleiste eingegeben wurde."""
+        """Navigiert zur URL aus der Adressleiste."""
         url_text = self.address_bar.text().strip()
-        if not url_text:
-            return
+        if not url_text: return
         if not (url_text.startswith("http://") or url_text.startswith("https://")):
             url_text = "https://" + url_text
         self.browser.setUrl(QUrl(url_text))
@@ -337,19 +397,19 @@ class MainWindow(QMainWindow):
         self.address_bar.setCursorPosition(0)
 
     def update_window_title(self, title: str):
-        """Aktualisiert den Fenstertitel."""
-        if title:
-            self.setWindowTitle(f"{title.strip()} - {self.base_window_title}")
+        """Aktualisiert den Fenstertitel mit dem Titel der aktuellen Seite."""
+        page_title = title.strip() if title else ""
+        if page_title:
+            self.setWindowTitle(f"{page_title} - {self.base_window_title}")
         else:
             self.setWindowTitle(self.base_window_title)
 
     def update_navigation_button_states(self):
-        """Aktualisiert den Aktivierungsstatus der Navigationsbuttons."""
+        """Aktualisiert den Aktivierungsstatus der Vorwärts-/Rückwärts-Buttons."""
         if hasattr(self, 'browser') and self.browser and self.browser.page() and self.browser.page().history():
             history = self.browser.page().history()
             self.back_button.setEnabled(history.canGoBack())
             self.forward_button.setEnabled(history.canGoForward())
         else:
-            # Fallback, falls Browser oder History nicht verfügbar
             self.back_button.setEnabled(False)
             self.forward_button.setEnabled(False)
