@@ -40,25 +40,39 @@ David Pierzyna
 
 =======
 
-## Änderungen Release v0.5.0
+## Änderungen Release v0.4.0
 
-Dein persönlicher Browserverlauf!
+Deine Lesezeichen, deine Ordnung!
 
-Mit opTiSurf kannst du jetzt ganz einfach nachvollziehen, welche Webseiten du besucht hast. Die neue Verlaufsfunktion hilft dir dabei, interessante Seiten schnell wiederzufinden!
+Ich freue mich, eine der wichtigsten Funktionen für ein angenehmes Surferlebnis in opTiSurf einzuführen: eine verbesserte Lesezeichenverwaltung! Ab sofort kannst du deine Lieblingswebseiten und wichtigen Links nicht nur speichern, sondern auch übersichtlich organisieren.
 
-* **Automatische Protokollierung:** opTiSurf speichert die von dir besuchten Webseiten (Titel und URL) sicher in deinem lokalen Verlauf.
-* **Übersichtlicher Verlaufs-Manager:** Über das Menü "Verlauf" > "Gesamten Verlauf anzeigen..." gelangst du zu einer detaillierten Ansicht deiner besuchten Seiten, sortiert nach Datum.
-* **Schneller Zugriff & einfache Bedienung:**
-    * Öffne Einträge aus dem Verlauf direkt im Browser per Doppelklick oder "Öffnen"-Button.
-    * Kopiere URLs aus dem Verlauf in deine Zwischenablage.
-    * Lösche bei Bedarf den gesamten Verlauf.
-* **Kontrolle über die Speicherdauer:** In den Einstellungen kannst du festlegen, wie lange dein Verlauf gespeichert werden soll (z.B. 30 Tage, 90 Tage, 1 Jahr oder immer). Ältere Einträge werden dann automatisch für dich bereinigt.
+Das ist neu bei den Lesezeichen:
 
-Ich arbeite kontinuierlich daran, den Verlauf mit weiteren Funktionen wie dem Löschen einzelner Einträge und einer Suchfunktion auszustatten.
+    Seite schnell als Lesezeichen speichern:
+    Mit einem Klick auf "Lesezeichen" > "Aktuelle Seite hinzufügen..." kannst du jede interessante Webseite sofort deiner Sammlung hinzufügen.
+
+    Ordner für perfekte Struktur:
+    Beim Hinzufügen eines Lesezeichens wirst du gefragt, in welchen Ordner es gespeichert werden soll. Du kannst aus deinen bestehenden Ordnern wählen, direkt einen neuen Ordner anlegen oder das Lesezeichen erstmal "Unsortiert" lassen. So behältst du immer den Überblick über deine gesammelten Links!
+
+    Der neue Lesezeichen-Manager:
+    Für die volle Kontrolle über deine Lesezeichen gibt es jetzt den "Lesezeichen-Manager", erreichbar über das Menü "Lesezeichen" > "Lesezeichen verwalten...". Im Manager erwartet dich:
+        Eine übersichtliche Baumansicht all deiner Ordner und der darin enthaltenen Lesezeichen, inklusive eines Bereichs für "Unsortierte" Lesezeichen.
+        Lesezeichen löschen: Nicht mehr benötigte Lesezeichen kannst du hier einfach und schnell entfernen.
+        Neue Ordner erstellen: Lege direkt im Manager neue Ordner an, um deine Sammlung thematisch zu gliedern.
+        Lesezeichen per Doppelklick öffnen: Ein Doppelklick auf ein Lesezeichen im Manager lädt die Seite direkt im Browser.
+
+    Schneller Zugriff im Hauptmenü:
+    Deine Lesezeichen (aktuell noch als Gesamtliste) sind weiterhin für den schnellen Zugriff direkt im "Lesezeichen"-Dropdown-Menü verfügbar.
+
+Mit diesen neuen Funktionen hoffe ich, dir die Organisation deiner Webinhalte zu erleichtern und opTiSurf noch nützlicher zu machen. Dein Feedback dazu ist wie immer sehr willkommen!
 
 ## Aktuelle Features
-* NEU: 
-* Lesezeichen-Verwaltung
+* NEU: Lesezeichen-Verwaltung:
+    - Aktuelle Seite einfach speichern
+    - Lesezeichen in Ordnern organisieren
+    - Übersichtlicher Lesezeichen-Manager zum Anzeigen und Löschen
+    - Schnellzugriff über das Lesezeichen-Menü
+
 * Surfen im Web mit moderner Chromium-basierter Engine
 * Intuitive Navigation (Adressleiste, Vorwärts, Zurück, Neu laden, Stopp)
 * Persönlich anpassbare Startseite
