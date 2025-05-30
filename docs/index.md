@@ -1,6 +1,6 @@
 # Willkommen bei opTiSurf Browser!
 
-Aktuelle Version: 0.3.1
+Aktuelle Version: 0.4.0
 
 opTiSurf ist ein Webbrowser-Projekt, das mit Python und PyQt entwickelt wird. 
 Hier findet ihr Infos zu aktuellen und geplanten Features.
@@ -36,31 +36,58 @@ Viele Grüße,
 David Pierzyna
 
 ## Download
-* [opTiSurf Setup v0.3.1](https://github.com/Davy1nbg/opTiSurf/releases/download/v0.3.1/opTiSurf_installer.exe)
+* [opTiSurf Setup v0.4.0](https://github.com/Davy1nbg/opTiSurf/releases/download/v0.4.0/opTiSurf_installer.exe)
 
 =======
 
-## Änderungen Release v0.3.1
-* Quality Update: Refactoring der Update-Prüfung & Auslagerung des Update-Checkers in eine eigene Datei
+## Änderungen Release v0.4.0
+
+Deine Lesezeichen, deine Ordnung!
+
+Ich freue mich, eine der wichtigsten Funktionen für ein angenehmes Surferlebnis in opTiSurf einzuführen: eine verbesserte Lesezeichenverwaltung! Ab sofort kannst du deine Lieblingswebseiten und wichtigen Links nicht nur speichern, sondern auch übersichtlich organisieren.
+
+Das ist neu bei den Lesezeichen:
+
+    Seite schnell als Lesezeichen speichern:
+    Mit einem Klick auf "Lesezeichen" > "Aktuelle Seite hinzufügen..." kannst du jede interessante Webseite sofort deiner Sammlung hinzufügen.
+
+    Ordner für perfekte Struktur:
+    Beim Hinzufügen eines Lesezeichens wirst du gefragt, in welchen Ordner es gespeichert werden soll. Du kannst aus deinen bestehenden Ordnern wählen, direkt einen neuen Ordner anlegen oder das Lesezeichen erstmal "Unsortiert" lassen. So behältst du immer den Überblick über deine gesammelten Links!
+
+    Der neue Lesezeichen-Manager:
+    Für die volle Kontrolle über deine Lesezeichen gibt es jetzt den "Lesezeichen-Manager", erreichbar über das Menü "Lesezeichen" > "Lesezeichen verwalten...". Im Manager erwartet dich:
+        Eine übersichtliche Baumansicht all deiner Ordner und der darin enthaltenen Lesezeichen, inklusive eines Bereichs für "Unsortierte" Lesezeichen.
+        Lesezeichen löschen: Nicht mehr benötigte Lesezeichen kannst du hier einfach und schnell entfernen.
+        Neue Ordner erstellen: Lege direkt im Manager neue Ordner an, um deine Sammlung thematisch zu gliedern.
+        Lesezeichen per Doppelklick öffnen: Ein Doppelklick auf ein Lesezeichen im Manager lädt die Seite direkt im Browser.
+
+    Schneller Zugriff im Hauptmenü:
+    Deine Lesezeichen (aktuell noch als Gesamtliste) sind weiterhin für den schnellen Zugriff direkt im "Lesezeichen"-Dropdown-Menü verfügbar.
+
+Mit diesen neuen Funktionen hoffe ich, dir die Organisation deiner Webinhalte zu erleichtern und opTiSurf noch nützlicher zu machen. Dein Feedback dazu ist wie immer sehr willkommen!
 
 ## Aktuelle Features
-* NEU: Automatische Update-Prüfung und -Benachrichtigung: opTiSurf prüft jetzt beim Start automatisch, ob eine neue Version zum Download bereitsteht. Zusätzlich können Sie jederzeit manuell über das Menü 'Hilfe' -> 'Nach Updates suchen...' eine Prüfung anstoßen. Ist ein Update verfügbar, erhalten Sie eine Benachrichtigung mit einem direkten Link zur Download-Seite. (Die Installation des Updates erfolgt weiterhin manuell.)
-* Surfen im Web mit Chromium-Engine
-* Adressleiste zur URL-Eingabe
-* Navigationsbuttons (Vor, Zurück, Neu laden, Stopp)
-* Dynamische Anpassung des Fenstertitels
-* Einstellbare Startseite (wird persistiert, die Einstellung ist auch nach einem Neustart verfügbar)
+* NEU: Lesezeichen-Verwaltung:
+    - Aktuelle Seite einfach speichern
+    - Lesezeichen in Ordnern organisieren
+    - Übersichtlicher Lesezeichen-Manager zum Anzeigen und Löschen
+    - Schnellzugriff über das Lesezeichen-Menü
+
+* Surfen im Web mit moderner Chromium-basierter Engine
+* Intuitive Navigation (Adressleiste, Vorwärts, Zurück, Neu laden, Stopp)
+* Persönlich anpassbare Startseite
+* Dynamischer Fenstertitel (zeigt den Titel der Webseite an)
+* Integrierte Benachrichtigung über neue Browser-Versionen
 
 
 ## Geplante Features
 * Blockieren von Drittanbieter-Cookies für mehr Privatsphäre
 * Ladefortschrittsanzeige
-* Lesezeichen setzen und verwalten
-* Zugriff auf downloads-Ordner und den Ordner für die heruntergeladenen Dateien selbst festlegen
+* Zugriff auf Downloads-Ordner und den Ordner für die heruntergeladenen Dateien selbst festlegen
 
 ## Feedback
 Habt ihr Ideen oder Fehler gefunden? Sagt mir einfach Bescheid!
 
 ---
 
-Letzte Aktualisierung: 28. Mai 2025
+Letzte Aktualisierung: 30. Mai 2025
