@@ -37,7 +37,7 @@ InfoBeforeFile=C:\private_projekte\Browser\text_vor_installation.txt
 InfoAfterFile=C:\private_projekte\Browser\text_nach_installation.txt
 ; Uncomment the following line to run in non administrative install mode (install for current user only).
 ;PrivilegesRequired=lowest
-OutputBaseFilename=mysetup
+OutputBaseFilename=opTiSurf_Setup_v0.5.0
 SetupIconFile=C:\private_projekte\Browser\opTiSurf.ico
 SolidCompression=yes
 WizardStyle=modern

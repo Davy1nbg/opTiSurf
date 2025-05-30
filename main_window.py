@@ -3,7 +3,7 @@ import urllib.request # Wird aktuell nicht direkt in dieser Datei verwendet
 from packaging.version import parse as parse_version # Wird aktuell nicht direkt hier verwendet
 
 from PyQt6.QtCore import QThread, QObject, pyqtSignal, QUrl, Qt, QSettings
-from PyQt6.QtGui import QAction, QDesktopServices # QIcon ggf. importieren, wenn du Icons für Aktionen setzt
+from PyQt6.QtGui import QAction, QDesktopServices, QIcon
 from PyQt6.QtWidgets import (
     QMainWindow, QLineEdit, QVBoxLayout, QHBoxLayout,
     QPushButton, QWidget, QMenu, QMessageBox, QInputDialog, QDialog
@@ -41,9 +41,26 @@ class MainWindow(QMainWindow):
         self.base_window_title = "opTiSurf Browser"
         self.setWindowTitle(self.base_window_title)
 
+        try:
+            # Annahme: Das Icon liegt im selben Verzeichnis wie deine Skripte
+            # oder in einem Unterordner 'icons'. Passe den Pfad ggf. an.
+            # Beispiel für Icon im selben Verzeichnis:
+            app_icon = QIcon("opTiSurf/opTiSurf.bmp") 
+            # Beispiel für Icon im Unterordner "icons":
+            # app_icon = QIcon("icons/optisurf_icon.png") 
+
+            if app_icon.isNull(): # Überprüfen, ob das Icon geladen werden konnte
+                print("WARNUNG [MainWindow]: Fenster-Icon konnte nicht geladen werden oder ist leer. Pfad korrekt?")
+            else:
+                self.setWindowIcon(app_icon)
+                print("INFO [MainWindow]: Fenster-Icon gesetzt.")
+        except Exception as e:
+            print(f"FEHLER [MainWindow]: Unerwarteter Fehler beim Laden des Fenster-Icons: {e}")
+
         self.bookmark_manager = BookmarkManager()
         self.history_manager = HistoryManager()
         self.browser = QWebEngineView()
+
 
     def _setup_ui_components(self):
         """Erstellt und arrangiert die Haupt-UI-Komponenten."""
