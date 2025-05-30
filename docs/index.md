@@ -47,21 +47,20 @@ Ich freue mich, eine der wichtigsten Funktionen für ein angenehmes Surferlebnis
 
 Das ist neu bei den Lesezeichen:
 
-    Seite schnell als Lesezeichen speichern:
-    Mit einem Klick auf "Lesezeichen" > "Aktuelle Seite hinzufügen..." kannst du jede interessante Webseite sofort deiner Sammlung hinzufügen.
+Seite schnell als Lesezeichen speichern:
+Mit einem Klick auf "Lesezeichen" > "Aktuelle Seite hinzufügen..." kannst du jede interessante Webseite sofort deiner Sammlung hinzufügen.
 
-    Ordner für perfekte Struktur:
-    Beim Hinzufügen eines Lesezeichens wirst du gefragt, in welchen Ordner es gespeichert werden soll. Du kannst aus deinen bestehenden Ordnern wählen, direkt einen neuen Ordner anlegen oder das Lesezeichen erstmal "Unsortiert" lassen. So behältst du immer den Überblick über deine gesammelten Links!
+Ordner für perfekte Struktur:
+Beim Hinzufügen eines Lesezeichens wirst du gefragt, in welchen Ordner es gespeichert werden soll. Du kannst aus deinen bestehenden Ordnern wählen, direkt einen neuen Ordner anlegen oder das Lesezeichen erstmal "Unsortiert" lassen. So behältst du immer den Überblick über deine gesammelten Links!
 
-    Der neue Lesezeichen-Manager:
-    Für die volle Kontrolle über deine Lesezeichen gibt es jetzt den "Lesezeichen-Manager", erreichbar über das Menü "Lesezeichen" > "Lesezeichen verwalten...". Im Manager erwartet dich:
-        Eine übersichtliche Baumansicht all deiner Ordner und der darin enthaltenen Lesezeichen, inklusive eines Bereichs für "Unsortierte" Lesezeichen.
-        Lesezeichen löschen: Nicht mehr benötigte Lesezeichen kannst du hier einfach und schnell entfernen.
-        Neue Ordner erstellen: Lege direkt im Manager neue Ordner an, um deine Sammlung thematisch zu gliedern.
-        Lesezeichen per Doppelklick öffnen: Ein Doppelklick auf ein Lesezeichen im Manager lädt die Seite direkt im Browser.
-
-    Schneller Zugriff im Hauptmenü:
-    Deine Lesezeichen (aktuell noch als Gesamtliste) sind weiterhin für den schnellen Zugriff direkt im "Lesezeichen"-Dropdown-Menü verfügbar.
+Der neue Lesezeichen-Manager:
+Für die volle Kontrolle über deine Lesezeichen gibt es jetzt den "Lesezeichen-Manager", erreichbar über das Menü "Lesezeichen" > "Lesezeichen verwalten...". 
+Im Manager erwartet dich:
+* Eine übersichtliche Baumansicht all deiner Ordner und der darin enthaltenen Lesezeichen, inklusive eines Bereichs für "Unsortierte" Lesezeichen.
+* Lesezeichen löschen: Nicht mehr benötigte Lesezeichen kannst du hier einfach und schnell entfernen.
+* Neue Ordner erstellen: Lege direkt im Manager neue Ordner an, um deine Sammlung thematisch zu gliedern.
+* Lesezeichen per Doppelklick öffnen: Ein Doppelklick auf ein Lesezeichen im Manager lädt die Seite direkt im Browser.
+* Schneller Zugriff im Hauptmenü: Deine Lesezeichen (aktuell noch als Gesamtliste) sind weiterhin für den schnellen Zugriff direkt im "Lesezeichen"-Dropdown-Menü verfügbar.
 
 Mit diesen neuen Funktionen hoffe ich, dir die Organisation deiner Webinhalte zu erleichtern und opTiSurf noch nützlicher zu machen. Dein Feedback dazu ist wie immer sehr willkommen!
 
