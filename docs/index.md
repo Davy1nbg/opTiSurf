@@ -38,7 +38,6 @@ David Pierzyna
 ## Download
 * [opTiSurf Setup v0.4.0](https://github.com/Davy1nbg/opTiSurf/releases/download/v0.4.0/opTiSurf_installer.exe)
 
-=======
 
 ## Änderungen Release v0.4.0
 
