@@ -1,6 +1,6 @@
 # Willkommen bei opTiSurf Browser!
 
-Aktuelle Version: 0.4.0
+Aktuelle Version: 0.5.0
 
 opTiSurf ist ein Webbrowser-Projekt, das mit Python und PyQt entwickelt wird. 
 Hier findet ihr Infos zu aktuellen und geplanten Features.
@@ -36,41 +36,49 @@ Viele Grüße,
 David Pierzyna
 
 ## Download
-* [opTiSurf Setup v0.4.0](https://github.com/Davy1nbg/opTiSurf/releases/download/v0.4.0/opTiSurf_installer.exe)
+* [opTiSurf Setup v0.5.0](https://github.com/Davy1nbg/opTiSurf/releases/download/v0.5.0/opTiSurf_installer.exe)
 
 
-## Änderungen Release v0.4.0
+## Änderungen Release v0.5.0
 
-Deine Lesezeichen, deine Ordnung!
+Dein Browserverlauf – Intelligent, Sicher und Anpassbar!
 
-Ich freue mich, eine der wichtigsten Funktionen für ein angenehmes Surferlebnis in opTiSurf einzuführen: eine verbesserte Lesezeichenverwaltung! Ab sofort kannst du deine Lieblingswebseiten und wichtigen Links nicht nur speichern, sondern auch übersichtlich organisieren.
+Mit der neuesten Version von opTiSurf führen wir eine umfassend überarbeitete Browserverlaufs-Funktion ein! Wir wissen, wie wichtig es ist, besuchte Webseiten einfach wiederzufinden und gleichzeitig die Kontrolle über die eigenen Daten zu behalten. Deshalb haben wir den Verlauf so gestaltet, dass er sowohl zuverlässig als auch flexibel ist.
 
-Das ist neu bei den Lesezeichen:
+Das bietet dir der neue Browserverlauf von opTiSurf:
 
-Seite schnell als Lesezeichen speichern:
-Mit einem Klick auf "Lesezeichen" > "Aktuelle Seite hinzufügen..." kannst du jede interessante Webseite sofort deiner Sammlung hinzufügen.
+Zuverlässige und Robuste Speicherung:
+Jede von dir besuchte Webseite (mit Titel, URL und genauem Zeitstempel) wird automatisch in einer lokalen Datenbank auf deinem Computer gespeichert. Diese Methode sorgt für eine stabile und performante Verwaltung deiner Daten, auch wenn sich mit der Zeit viele Einträge ansammeln.
 
-Ordner für perfekte Struktur:
-Beim Hinzufügen eines Lesezeichens wirst du gefragt, in welchen Ordner es gespeichert werden soll. Du kannst aus deinen bestehenden Ordnern wählen, direkt einen neuen Ordner anlegen oder das Lesezeichen erstmal "Unsortiert" lassen. So behältst du immer den Überblick über deine gesammelten Links!
+Volle Kontrolle über die Speicherdauer – Du entscheidest!
+Nicht jeder möchte seinen Browserverlauf unbegrenzt aufbewahren. In den Einstellungen von opTiSurf kannst du jetzt genau festlegen, wie lange deine Verlaufsdaten gespeichert werden sollen:
+* Optionen: Wähle zwischen "30 Tagen", "90 Tagen (Standard)", "365 Tagen (1 Jahr)" oder "Immer behalten".
+* Automatische Bereinigung: Wenn du eine begrenzte Speicherdauer einstellst, kümmert sich opTiSurf automatisch im Hintergrund darum, ältere Einträge zu entfernen. Das hält deine Verlaufsdatenbank schlank und performant, ohne dass du manuell eingreifen musst.
 
-Der neue Lesezeichen-Manager:
-Für die volle Kontrolle über deine Lesezeichen gibt es jetzt den "Lesezeichen-Manager", erreichbar über das Menü "Lesezeichen" > "Lesezeichen verwalten...". 
-Im Manager erwartet dich:
-* Eine übersichtliche Baumansicht all deiner Ordner und der darin enthaltenen Lesezeichen, inklusive eines Bereichs für "Unsortierte" Lesezeichen.
-* Lesezeichen löschen: Nicht mehr benötigte Lesezeichen kannst du hier einfach und schnell entfernen.
-* Neue Ordner erstellen: Lege direkt im Manager neue Ordner an, um deine Sammlung thematisch zu gliedern.
-* Lesezeichen per Doppelklick öffnen: Ein Doppelklick auf ein Lesezeichen im Manager lädt die Seite direkt im Browser.
-* Schneller Zugriff im Hauptmenü: Deine Lesezeichen (aktuell noch als Gesamtliste) sind weiterhin für den schnellen Zugriff direkt im "Lesezeichen"-Dropdown-Menü verfügbar.
+Übersichtlicher Verlaufs-Manager:
+Über das Menü "Verlauf" > "Gesamten Verlauf anzeigen..." gelangst du zu einer klar strukturierten Ansicht deiner besuchten Seiten. Dort siehst du übersichtlich:
+* Den Titel der Seite
+* Die vollständige URL
+* Den genauen Zeitpunkt deines letzten Besuchs
 
-Mit diesen neuen Funktionen hoffe ich, dir die Organisation deiner Webinhalte zu erleichtern und opTiSurf noch nützlicher zu machen. Dein Feedback dazu ist wie immer sehr willkommen!
+Einfache Interaktion mit deinem Verlauf:
+* Direkt öffnen: Mit einem Doppelklick oder über den "Öffnen"-Button im Verlaufs-Manager kannst du jede Seite sofort   wieder im Browser laden.
+* URL kopieren: Kopiere die Adresse eines Verlaufseintrags mit einem Klick in deine Zwischenablage.
+* Gesamten Verlauf löschen: Wenn du einen sauberen Schnitt machen möchtest, kannst du deinen gesamten Browserverlauf sicher und unwiderruflich entfernen.
+
+Mit diesem intelligenten und anpassbaren Verlauf möchten wir dir nicht nur helfen, wichtige Informationen schnell wiederzufinden, sondern dir auch die volle Kontrolle darüber geben, wie deine Browserdaten verwaltet werden. Zukünftige Updates werden weitere Verwaltungsoptionen bringen, wie das Löschen einzelner Einträge und eine Suchfunktion im Verlauf!
 
 ## Aktuelle Features
-* NEU: Lesezeichen-Verwaltung:
-    - Aktuelle Seite einfach speichern
-    - Lesezeichen in Ordnern organisieren
-    - Übersichtlicher Lesezeichen-Manager zum Anzeigen und Löschen
-    - Schnellzugriff über das Lesezeichen-Menü
+* NEU: Browserverlauf
+    - Automatische Protokollierung: Speichert besuchte Webseiten (Titel, URL, Zeitstempel) zuverlässig in einer lokalen Datenbank.
+    - Kontrollierte Speicherdauer: Wähle in den Einstellungen, wie lange dein Verlauf aufbewahrt wird (30, 90, 365     Tage oder immer). Ältere Einträge werden automatisch bereinigt.
+    - Übersichtlicher Verlaufs-Manager: Zeige alle Einträge sortiert mit Titel, URL und Besuchszeit an.
+    - Einfache Aktionen:
+    * Seiten direkt aus dem Verlauf öffnen.
+    * URLs in die Zwischenablage kopieren.
+    * Gesamten Verlauf sicher löschen.
 
+* Lesezeichen-Verwaltung
 * Surfen im Web mit moderner Chromium-basierter Engine
 * Intuitive Navigation (Adressleiste, Vorwärts, Zurück, Neu laden, Stopp)
 * Persönlich anpassbare Startseite
