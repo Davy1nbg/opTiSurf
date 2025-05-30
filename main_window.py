@@ -24,7 +24,7 @@ from config import (
 )
 
 # Globale Konstante für die Anwendung
-CURRENT_APP_VERSION = "0.4.0" # Beispiel: Aktualisiere dies bei jedem Release
+CURRENT_APP_VERSION = "0.5.0" # Beispiel: Aktualisiere dies bei jedem Release
 
 class MainWindow(QMainWindow):
     def __init__(self, *args, **kwargs):
